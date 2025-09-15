@@ -3,7 +3,7 @@ name: Build and Deploy to ECR and Kubernetes
 on:
   push:
     branches:
-      - main  # or your branch
+      - main  #your branch
 
 jobs:
   build_and_deploy:
