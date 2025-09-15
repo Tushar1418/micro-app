@@ -27,7 +27,7 @@ jobs:
       - name: Build, tag, and push Docker image
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}          # e.g., 123456789012.dkr.ecr.us-east-1.amazonaws.com
-          ECR_REPOSITORY: micro-app                          # Your repo name
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}                          # Your repo name
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -37,7 +37,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPOSITORY: micro-app
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo "$KUBE_CONFIG_DATA" | base64 --decode > kubeconfig
