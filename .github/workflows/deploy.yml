@@ -30,21 +30,20 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build, tag, and push Docker image
-      env:
-        IMAGE_TAG: latest
       run: |
-        IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:$IMAGE_TAG
+        IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
         docker build -t $IMAGE_URI ./app
         docker push $IMAGE_URI
         echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-    - name: Update kubeconfig
+    - name: Update kubeconfig for EKS
       run: |
         aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
     - name: Deploy to EKS
+      env:
+        IMAGE_URI: ${{ env.IMAGE_URI }}
       run: |
         sudo apt-get update && sudo apt-get install -y gettext-base
-        export IMAGE_URI=${{ env.IMAGE_URI }}
         envsubst < k8s/deployment.yaml | kubectl apply -f -
         kubectl apply -f k8s/service.yaml
