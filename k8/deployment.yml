@@ -14,7 +14,6 @@ spec:
     spec:
       containers:
       - name: python-microservice
-        image: 881892164822.dkr.ecr.us-east-1.amazonaws.com/repo
+        image: 881892164822.dkr.ecr.ap-south-1.amazonaws.com:latest
         ports:
         - containerPort: 5000
-
